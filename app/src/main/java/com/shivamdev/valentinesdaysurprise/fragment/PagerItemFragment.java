@@ -1,7 +1,6 @@
 package com.shivamdev.valentinesdaysurprise.fragment;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -44,21 +43,13 @@ public class PagerItemFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.pager_item_fragment, container, false);
-
         //images = getArguments().getIntegerArrayList(IMAGES_KEY);
         //pos = getArguments().getInt(POS_KEY);
         imageDrawable = getArguments().getInt(IMAGE_KEY);
-
         ImageView ivImage = (ImageView) view.findViewById(R.id.iv_images);
-
-
-
         BitmapLruCache cache = BitmapLruCache.getInstance();
-
         Bitmap image = cache.getBitmap(getResources().getResourceEntryName(imageDrawable), getResources(), imageDrawable);
-
-        ivImage.setImageDrawable(new BitmapDrawable(image));
-
+        ivImage.setImageBitmap(image);
         return view;
     }
 }

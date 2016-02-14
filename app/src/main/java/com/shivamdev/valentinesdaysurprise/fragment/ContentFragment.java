@@ -49,9 +49,7 @@ public class ContentFragment extends Fragment {
     }
 
     private void getImagesArray(int position) {
-
         imagesArray.clear();
-
         if(position == 0) {
             for (int i = 0; i < 4; i++) {
                 imagesArray.add(getResources().getIdentifier("dubai_atlantis" + (i + 1), "drawable", getActivity().getPackageName()));

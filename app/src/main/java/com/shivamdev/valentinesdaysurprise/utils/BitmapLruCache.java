@@ -5,10 +5,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.util.LruCache;
 
+import com.shivamdev.valentinesdaysurprise.activity.L;
+
 /**
  * Created by shivamchopra on 12/02/16.
  */
 public class BitmapLruCache extends LruCache<String, Bitmap> {
+
+    private static final String TAG = BitmapLruCache.class.getName();
 
     private static BitmapLruCache bitmapCache;
 
@@ -35,11 +39,15 @@ public class BitmapLruCache extends LruCache<String, Bitmap> {
     }
 
 
-    public Bitmap getBitmap(String key, Resources resources, int imageInt){
-        if(get(key) == null){
-            Bitmap bitmap = BitmapFactory.decodeResource(resources, imageInt);
+    public Bitmap getBitmap(String key, Resources resources, int imageInt) {
+        if (get(key) == null) {
+            L.l(TAG, "create new  bitmap");
+            BitmapFactory.Options opt = new BitmapFactory.Options();
+            opt.inPreferredConfig = Bitmap.Config.RGB_565;
+            Bitmap bitmap = BitmapFactory.decodeResource(resources, imageInt, opt);
             put(key, bitmap);
         }
+        L.l(TAG, "load from cachce");
         return get(key);
     }
 
@@ -47,15 +55,15 @@ public class BitmapLruCache extends LruCache<String, Bitmap> {
     @Override
     protected void entryRemoved(boolean evicted, String key, Bitmap oldValue, Bitmap newValue) {
         super.entryRemoved(evicted, key, oldValue, newValue);
-        if(evicted){
+        L.l(TAG, "entry removed: " + evicted + " : " + key + " : " + oldValue + " : " + newValue);
+        if (evicted) {
             oldValue.recycle();
-            oldValue = null;
         }
     }
 
     @Override
     protected int sizeOf(String key, Bitmap value) {
-        return value.getRowBytes() * value.getHeight() / 1024;
+        return value.getByteCount() / 1024;
     }
 
 }
